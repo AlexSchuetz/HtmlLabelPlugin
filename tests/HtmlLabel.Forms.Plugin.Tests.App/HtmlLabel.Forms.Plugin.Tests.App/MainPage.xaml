@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:htmlLabel="clr-namespace:LabelHtml.Forms.Plugin.Abstractions;assembly=HtmlLabel.Forms.Plugin"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             mc:Ignorable="d"
+             ios:Page.UseSafeArea="true"
+             x:Class="HtmlLabel.Forms.Plugin.Tests.App.MainPage">
+    <ScrollView>
+        <StackLayout Padding="10">
+            <StackLayout>
+                <Label Text="Bold" />
+                <htmlLabel:HtmlLabel Text="{Binding Bold}" />
+            </StackLayout>
+            <StackLayout>
+                <Label Text="Italic" />
+                <htmlLabel:HtmlLabel Text="{Binding Italic}" />
+            </StackLayout>
+            <StackLayout>
+                <Label Text="Red color" />
+                <htmlLabel:HtmlLabel Text="{Binding Color}" TextColor="Red" />
+            </StackLayout>
+            <StackLayout>
+                <Label Text="Align center" />
+                <htmlLabel:HtmlLabel Text="{Binding AlignCenter}" HorizontalTextAlignment="Center" />
+            </StackLayout>
+            <StackLayout>
+                <Label Text="Align end (no iOS)" />
+                <htmlLabel:HtmlLabel Text="{Binding AlignEnd}" HorizontalTextAlignment="End" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

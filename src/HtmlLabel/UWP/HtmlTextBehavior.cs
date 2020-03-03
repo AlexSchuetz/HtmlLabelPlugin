@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Windows.UI.Xaml;
@@ -8,86 +7,14 @@ using Windows.UI.Xaml.Documents;
 using LabelHtml.Forms.Plugin.Abstractions;
 using Xamarin.Forms.Platform.UWP;
 using LabelHtml.Forms.Plugin.UWP;
-using Microsoft.Xaml.Interactivity;
 using Xamarin.Forms;
 using Span = Windows.UI.Xaml.Documents.Span;
+using Xamarin.Essentials;
 
 [assembly: ExportRenderer(typeof(HtmlLabel), typeof(HtmlLabelRenderer))]
-// ReSharper disable once CheckNamespace
 namespace LabelHtml.Forms.Plugin.UWP
 {
-	/// <summary>
-	/// HtmlLable Implementation
-	/// </summary>
-	[Xamarin.Forms.Internals.Preserve(AllMembers = true)]
-	public class HtmlLabelRenderer : LabelRenderer
-	{
-		/// <summary>
-		/// Used for registration with dependency service
-		/// </summary>
-		public static void Initialize() { }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnElementChanged(ElementChangedEventArgs<Label> e)
-		{
-			base.OnElementChanged(e);
-
-			if (Control == null)
-            {
-                return;
-            }
-
-            UpdateText();
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			base.OnElementPropertyChanged(sender, e);
-			if (e.PropertyName == Label.TextProperty.PropertyName ||
-			         e.PropertyName == Label.FontAttributesProperty.PropertyName ||
-			         e.PropertyName == Label.FontFamilyProperty.PropertyName ||
-			         e.PropertyName == Label.FontSizeProperty.PropertyName ||
-			         e.PropertyName == Label.HorizontalTextAlignmentProperty.PropertyName ||
-			         e.PropertyName == Label.TextColorProperty.PropertyName)
-            {
-                UpdateText();
-            }
-        }
-
-		private void UpdateText()
-		{
-			if (Control == null || Element == null)
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(Control.Text))
-            {
-                return;
-            }
-
-            // Gets the complete HTML string
-            var helper = new LabelRendererHelper(Element, Element.Text);
-			Control.Text = helper.ToString();
-
-			// Adds the HtmlTextBehavior because UWP's TextBlock
-			// does not natively support HTML content
-			var behavior = new HtmlTextBehavior((HtmlLabel)Element);
-            BehaviorCollection behaviors = Interaction.GetBehaviors(Control);
-			behaviors.Clear();
-			behaviors.Add(behavior);
-		}
-	}
-
-	internal class HtmlTextBehavior : Behavior<TextBlock>
+    internal class HtmlTextBehavior : Behavior<TextBlock>
 	{
 		// All the supported tags
 		internal const string _elementA = "A";
@@ -101,8 +28,8 @@ namespace LabelHtml.Forms.Plugin.UWP
 		internal const string _elementUl = "UL";
 		internal const string _elementLi = "LI";
 		internal const string _elementDiv = "DIV";
-
 		private readonly HtmlLabel _label;
+
 		public HtmlTextBehavior(HtmlLabel label)
 		{
 			_label = label;
@@ -196,7 +123,7 @@ namespace LabelHtml.Forms.Plugin.UWP
                             return;
                         }
 
-                        Device.OpenUri(new Uri(href.Value));
+                        Launcher.OpenAsync(new Uri(href.Value)).GetAwaiter().GetResult();
 						label.SendNavigated(args);
 					};
 					inlines.Add(link);
@@ -256,6 +183,7 @@ namespace LabelHtml.Forms.Plugin.UWP
 					ParseText(node as XElement, currentInlines, label);
 				}
 			}
+
 			// Add newlines for paragraph tags
 			if (elementName == "ElementP")
 			{
@@ -287,38 +215,5 @@ namespace LabelHtml.Forms.Plugin.UWP
             inlines.Add(new LineBreak());
 			return true;
 		}
-	}
-
-	internal abstract class Behavior<T> : Behavior where T : DependencyObject
-	{
-		protected new T AssociatedObject => base.AssociatedObject as T;
-
-		protected override void OnAttached()
-		{
-			base.OnAttached();
-			if (AssociatedObject == null)
-            {
-                throw new InvalidOperationException("AssociatedObject is not of the right type");
-            }
-        }
-	}
-
-	internal abstract class Behavior : DependencyObject, IBehavior
-	{
-		public void Attach(DependencyObject associatedObject)
-		{
-			AssociatedObject = associatedObject;
-			OnAttached();
-		}
-
-		public void Detach() => OnDetaching();
-
-		protected virtual void OnAttached() { }
-
-		protected virtual void OnDetaching() { }
-
-		protected DependencyObject AssociatedObject { get; set; }
-
-		DependencyObject IBehavior.AssociatedObject => AssociatedObject;
 	}
 }

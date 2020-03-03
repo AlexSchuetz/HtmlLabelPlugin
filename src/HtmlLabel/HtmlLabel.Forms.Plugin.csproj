@@ -1,14 +1,14 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-		<TargetFrameworks>netstandard2.0;MonoAndroid81;Xamarin.iOS10;uap10.0.17763</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;MonoAndroid90;Xamarin.iOS10;uap10.0.17763</TargetFrameworks>
 
 		<AssemblyName>HtmlLabel.Forms.Plugin</AssemblyName>
-    <RootNamespace>HtmlLabel.Forms.Plugin</RootNamespace>
-    <Product>HtmlLabel.Forms.Plugin)</Product>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <AssemblyFileVersion>3.0.0.0</AssemblyFileVersion>
-    <Version>3.0.2.0</Version>
+    <RootNamespace>LabelHtml.Forms.Plugin</RootNamespace>
+    <Product>HtmlLabel.Forms.Plugin</Product>
+    <AssemblyVersion>4.0.0</AssemblyVersion>
+    <AssemblyFileVersion>4.0.0</AssemblyFileVersion>
+    <Version>4.0.0</Version>
     <Authors>Matteo Bortolazzo</Authors>
     <PackageId>Xam.Plugin.HtmlLabel</PackageId>
     <PackOnBuild>true</PackOnBuild>    
@@ -21,18 +21,17 @@
     <Description>
 			Custom control for your Xamarin.Forms project to display HTML content into labels.
 			Ensure you call HtmlLabelRenderer.Init() on each platform!
-			Built against: 3.6.0.293080
 		</Description>
-    <Copyright>Copyright 2018</Copyright>
+    <Copyright>Copyright 2020</Copyright>
     <RepositoryUrl>https://github.com/matteobortolazzo/HtmlLabelPlugin</RepositoryUrl>
     <PackageReleaseNotes>See: https://github.com/matteobortolazzo/HtmlLabelPlugin </PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-		<LangVersion>7.2</LangVersion>
     <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
     <DebugType>full</DebugType>
     <DefineConstants>$(DefineConstants);</DefineConstants>
     <PackageIconUrl>http://xamarin.com/content/images/nuget/xamarin.png</PackageIconUrl>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
@@ -41,21 +40,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.1" />
-    <PackageReference Include="Xamarin.Forms" Version="3.6.0.293080 " />
-    <Compile Include="*.shared.cs" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms" Version="4.5.0.356" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.0" />
+    <Compile Include="Shared\**" />
   </ItemGroup>
  
 	<ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.0" />
-    <Compile Include="*.uwp.cs" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.1" />
+    <Compile Include="UWP\**" />
   </ItemGroup>
 	
 	<ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
-		<Compile Include="*.android.cs" />
+    <Compile Include="Android\**" />
 	</ItemGroup>
 
    <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
-    <Compile Include="*.ios.cs" />
+     <Compile Include="iOS\**" />
   </ItemGroup>
 </Project>
